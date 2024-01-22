@@ -10,6 +10,12 @@ weather_data = pd.read_excel("GujratTempHumiditySpeed.xlsx")
 merged_data = pd.merge(jeera_data, weather_data, on="Date", how="inner")
 
 # Preprocess data if needed
+# Ensure that columns used for regression are numeric
+numeric_columns = ['Temperature', 'Dew Point', 'Humidity', 'Wind Speed', 'Price']
+merged_data[numeric_columns] = merged_data[numeric_columns].apply(pd.to_numeric, errors='coerce')
+
+# Drop rows with missing values
+merged_data = merged_data.dropna()
 
 # Build multiple regression model
 X = merged_data[['Temperature', 'Dew Point', 'Humidity', 'Wind Speed']]
