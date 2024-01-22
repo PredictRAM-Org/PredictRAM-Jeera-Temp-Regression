@@ -12,6 +12,8 @@ merged_data = pd.merge(jeera_data, weather_data, on="Date", how="inner")
 # Preprocess data if needed
 # Ensure that columns used for regression are numeric
 numeric_columns = ['Temperature', 'Dew Point', 'Humidity', 'Wind Speed', 'Price']
+
+# Convert relevant columns to numeric, coercing errors to NaN
 merged_data[numeric_columns] = merged_data[numeric_columns].apply(pd.to_numeric, errors='coerce')
 
 # Drop rows with missing values
@@ -22,6 +24,11 @@ X = merged_data[['Temperature', 'Dew Point', 'Humidity', 'Wind Speed']]
 X = sm.add_constant(X)  # add a constant term to the independent variables
 y = merged_data['Price']
 
+# Ensure that the dependent variable is numeric
+y = pd.to_numeric(y, errors='coerce')
+y = y.dropna()
+
+# Build the model
 model = sm.OLS(y, X).fit()
 
 # Streamlit App
