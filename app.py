@@ -19,9 +19,8 @@ merged_data[numeric_columns] = merged_data[numeric_columns].apply(pd.to_numeric,
 # Drop rows with missing values
 merged_data = merged_data.dropna()
 
-# Build multiple regression model
-X = merged_data[['Temperature', 'Dew Point', 'Humidity', 'Wind Speed']]
-X = sm.add_constant(X)  # add a constant term to the independent variables
+# Add a constant column to the independent variables
+X = sm.add_constant(merged_data[['Temperature', 'Dew Point', 'Humidity', 'Wind Speed']])
 y = merged_data['Price']
 
 # Ensure that the dependent variable is numeric
