@@ -19,13 +19,16 @@ merged_data[numeric_columns] = merged_data[numeric_columns].apply(pd.to_numeric,
 # Drop rows with missing values
 merged_data = merged_data.dropna()
 
-# Add a constant column to the independent variables
-X = sm.add_constant(merged_data[['Temperature', 'Dew Point', 'Humidity', 'Wind Speed']])
+# Build multiple regression model
+X = merged_data[['Temperature', 'Dew Point', 'Humidity', 'Wind Speed']]
 y = merged_data['Price']
 
 # Ensure that the dependent variable is numeric
 y = pd.to_numeric(y, errors='coerce')
 y = y.dropna()
+
+# Add a constant term directly to X
+X = sm.add_constant(X)
 
 # Build the model
 model = sm.OLS(y, X).fit()
